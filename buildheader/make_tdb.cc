@@ -666,6 +666,7 @@ int main (int argc, char *const argv[] __attribute__((__unused__))) {
     // compression methods
     printf("typedef enum toku_compression_method {\n");
     printf("    TOKU_NO_COMPRESSION = 0,\n");  // "identity" compression
+    printf("    TOKU_ZSTD_8_METHOD  = 5,\n");  // facebook zstd level 8
     printf("    TOKU_ZSTD_METHOD  = 6,\n");  // facebook zstd
     printf("    TOKU_SNAPPY_METHOD  = 7,\n");  // google snappy
     printf("    TOKU_ZLIB_METHOD    = 8,\n");  // RFC 1950 says use 8 for zlib.  It reserves 15 to allow more bytes.

@@ -84,6 +84,7 @@ size_t toku_compress_bound (enum toku_compression_method a, size_t size)
     case TOKU_SNAPPY_METHOD:
         return (1 + snappy::MaxCompressedLength(size));
     case TOKU_ZSTD_METHOD:
+    case TOKU_ZSTD_8_METHOD:
          return 1 + ZSTD_compressBound(size);
     default:
         break;
@@ -182,19 +183,35 @@ void toku_compress (enum toku_compression_method a,
         return;
     }
     case TOKU_ZSTD_METHOD: {
+         const int compression_level = 1;
          if (sourceLen == 0) {
              // requires at least one byte, so we handle this ourselves
              assert(1 <= *destLen);
              *destLen = 1;
          } else {
              // zstd with default compression level 1
-             int compression_level = 1;
              size_t const actual_len = ZSTD_compress((void*)(dest + 1), *destLen - 1, source, sourceLen, compression_level);
              assert(!ZSTD_isError(actual_len));
              *destLen = actual_len + 1;
          }
          // Fill in that first byte
-         dest[0] = TOKU_ZSTD_METHOD;
+         dest[0] = TOKU_ZSTD_METHOD + (compression_level << 4);
+         return;
+     }
+    case TOKU_ZSTD_8_METHOD: {
+         const int compression_level = 8;
+         if (sourceLen == 0) {
+             // requires at least one byte, so we handle this ourselves
+             assert(1 <= *destLen);
+             *destLen = 1;
+         } else {
+             // zstd with default compression level 8
+             size_t const actual_len = ZSTD_compress((void*)(dest + 1), *destLen - 1, source, sourceLen, compression_level);
+             assert(!ZSTD_isError(actual_len));
+             *destLen = actual_len + 1;
+         }
+         // Fill in that first byte
+         dest[0] = TOKU_ZSTD_METHOD + (compression_level << 4);
          return;
      }
     default:
