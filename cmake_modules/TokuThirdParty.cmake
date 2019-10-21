@@ -111,7 +111,7 @@ set_target_properties(snappy PROPERTIES IMPORTED_LOCATION
 add_dependencies(snappy build_snappy)
 
 ## add zstd with an external project
-set(ZSTD_SOURCE_DIR "${TokuDB_SOURCE_DIR}/third_party/zstd-1.3.3" CACHE FILEPATH "Where to find sources for zstd.")
+set(ZSTD_SOURCE_DIR "${TokuDB_SOURCE_DIR}/third_party/zstd-1.4.3" CACHE FILEPATH "Where to find sources for zstd.")
 if (NOT EXISTS "${ZSTD_SOURCE_DIR}/build/cmake/CMakeLists.txt")
     message(FATAL_ERROR "Can't find the zstd sources.  Please check them out to ${ZSTD_SOURCE_DIR} or modify ZSTD_SOURCE_DIR.")
 endif ()
